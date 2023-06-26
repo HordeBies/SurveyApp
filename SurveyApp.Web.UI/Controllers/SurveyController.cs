@@ -4,6 +4,7 @@ using SurveyApp.Core.DTO;
 using SurveyApp.Domain.Entities;
 using SurveyApp.Domain.RepositoryContracts;
 using SurveyApp.Web.UI.Models;
+using System.Collections;
 
 namespace SurveyApp.Web.UI.Controllers
 {
@@ -38,15 +39,23 @@ namespace SurveyApp.Web.UI.Controllers
             var request = mapper.Map<Submission>(model.Request);
             request.CreatedOn = DateTime.Now;
             await unitOfWork.Submissions.CreateAsync(request);
-            //await unitOfWork.SaveAsync();
+            await unitOfWork.SaveAsync();
             TempData["success"] = "Survey submitted successfully";
             return RedirectToAction(nameof(TakeSurvey), new { survey_id });
         }
         [HttpGet]
         [Route("/statistics/{survey_id:int}")]
-        public IActionResult ShowSurveyStatistics(int survey_id)
+        public async Task<IActionResult> ShowSurveyStatistics(int survey_id)
         {
-            return View("SurveyStatistics");
+            var submissions = await unitOfWork.Submissions.GetAllAsync(r => r.SurveyId == survey_id, includeProperties: true);
+            var survey = await unitOfWork.Surveys.GetAsync(r => r.Id == survey_id);
+            var model = new StatisticsViewModel()
+            {
+                Survey = mapper.Map<SurveyResponse>(survey),
+                Submissions = mapper.Map<IEnumerable<SubmissionResponse>>(submissions),
+            };
+            model.StatsDict = model.Survey.Questions.ToDictionary(r => r, r => model.Submissions.SelectMany(t => t.Answers).Where(s => s.QuestionId == r.Id));
+            return View("SurveyStatistics", model);
         }
     }
 }

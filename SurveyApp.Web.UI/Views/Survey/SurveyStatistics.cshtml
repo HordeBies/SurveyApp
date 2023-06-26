@@ -1,1 +1,93 @@
-﻿<h1>Statistics</h1>
+﻿@using SurveyApp.Core.DTO;
+@using SurveyApp.Core.Enums;
+@model StatisticsViewModel
+@{
+    ViewBag.Title = "Statistics - " + Model.Survey.Name;
+}
+<main role="main" class="pb-3">
+    <div class="p-4 d-flex justify-content-center w-100">
+        <div class="mt-4 mx-0 mx-sm-auto">
+            <div class="card my-4" style="max-width: 90vw; width: 960px;">
+                <div class="card-body">
+                    <h3 class="card-title text-center fw-bold text-primary">@Model.Survey.Name</h3>
+                </div>
+            </div>
+            @foreach (var kvp in Model.StatsDict)
+            {
+                var question = kvp.Key;
+                var answers = kvp.Value;
+                <div class="card my-4" style="max-width: 90vw; width: 960px;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="fw-bold">@(question.Name):</span> <small>@(question.Text)</small>
+                        </h5>
+                        <div id="chart_div_@(question.Id)"></div>
+                        @if (question.Type == QuestionTypes.rating.ToString() || question.Type == QuestionTypes.single_choice.ToString())
+                        {
+                        <script>
+                            google.charts.load('current', { packages: ['corechart', 'bar'] });
+                            google.charts.setOnLoadCallback(function () {
+                                var data = new google.visualization.DataTable();
+                                data.addColumn('string', 'Choice');
+                                data.addColumn('number', 'Respondents');
+
+                                data.addRows([
+                            @{
+                                int idx = 1;
+                            }
+                            @foreach (var choice in question.Choices.OrderBy(r => r.Position))
+                            {
+                                @:[{ v: "@Html.Raw(choice.Text)" }, @(answers.Count(r => r.Value == (question.Type == QuestionTypes.single_choice.ToString() ? choice.Text : idx.ToString())))],
+                                idx++;
+                            }
+                                                                ]);
+
+                                var options = {
+                                    legend: 'none'
+                                };
+
+                                var chart = new google.visualization.ColumnChart(
+                                    document.getElementById('chart_div_@(question.Id)'));
+
+                                chart.draw(data, options);
+                            });
+                        </script>
+                        }
+                        @if(question.Type == QuestionTypes.single_open_ended.ToString() || question.Type == QuestionTypes.multi_open_ended.ToString())
+                        {
+                            <script>
+                                google.charts.load('current', { 'packages': ['table'] });
+                                google.charts.setOnLoadCallback(function () {
+                                    var data = new google.visualization.DataTable();
+                                    data.addColumn('string', 'Answers');
+                                    data.addRows([
+                                @foreach (var answer in answers)
+                                {
+                                    @:['Lorem ipsum dolor sit amet consectetur adipiscing elit inceptos habitant, molestie nam sapien vel urna morbi vivamus ut ullamcorper ante, feugiat mus eros laoreet consequat est risus ultrices. Varius eros magnis torquent volutpat massa bibendum pulvinar imperdiet, et mauris sociosqu turpis nulla justo blandit risus, viverra sed dictumst porta vestibulum tincidunt ultricies. Parturient platea fermentum pellentesque facilisi ad lacus eu ultrices aenean ullamcorper egestas, vestibulum a varius sociis consequat nullam litora non sollicitudin lacinia metus, dignissim auctor erat mauris felis integer cursus commodo tortor et                                    @Html.Raw(answer.Value)'],
+
+                                }
+                                    ]);
+
+                                    var table = new google.visualization.Table(document.getElementById('chart_div_@(question.Id)'));
+                                    var options = { 
+                                        showRowNumber: true, 
+                                        width: '100%', 
+                                        height: '100%',
+                                        page: 'enable',
+                                        sort: 'disable'
+                                    };
+                                    table.draw(data, options);
+                                });
+                                
+                            </script>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
+
+@section Styles{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+}
