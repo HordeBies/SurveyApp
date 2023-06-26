@@ -22,8 +22,7 @@ namespace SurveyApp.Core.DTO
         public string Text { get; set; }
 
         [Required]
-        [AllowedValues(QuestionTypes.SingleChoice, QuestionTypes.SingleOpenEnded, QuestionTypes.MultiOpenEnded, QuestionTypes.Rating, ErrorMessage = $"Allowed values are: {QuestionTypes.SingleChoice},{QuestionTypes.SingleOpenEnded},{QuestionTypes.MultiOpenEnded},{QuestionTypes.Rating}")] // For more complex validation custom validator can be used but for now this will do just fine
-        public string Type { get; set; }
+        public QuestionTypes Type { get; set; }
 
         public ICollection<ChoiceCreateRequest> Choices { get; set; }
     }

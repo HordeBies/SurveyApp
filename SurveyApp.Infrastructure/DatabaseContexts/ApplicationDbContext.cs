@@ -8,6 +8,8 @@ namespace SurveyApp.Infrastructure.DatabaseContexts
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Choice> Choices { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -16,9 +18,10 @@ namespace SurveyApp.Infrastructure.DatabaseContexts
             builder.Entity<Question>().Property(r => r.Position).HasDefaultValue(1);
             builder.Entity<Choice>().Property(r => r.Position).HasDefaultValue(1);
 
-            // Eagerly loading navigation properties for Survey model hierarchy
+            // Eagerly loading some navigation properties.
             builder.Entity<Survey>().Navigation(r => r.Questions).AutoInclude();
             builder.Entity<Question>().Navigation(r => r.Choices).AutoInclude();
+            builder.Entity<Submission>().Navigation(r => r.Answers).AutoInclude();
         }
     }
 }

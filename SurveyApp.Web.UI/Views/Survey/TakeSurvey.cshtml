@@ -1,0 +1,139 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using SurveyApp.Core.DTO;
+@using SurveyApp.Core.Enums;
+@model SurveyViewModel
+@{
+    var RatingIndexes = new List<int>();
+    ViewBag.Title = Model.Survey.Name;
+}
+@section Styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/modules/2c5504ab9a86164db22a92dc8793843d.min.css">
+}
+<main role="main" class="pb-3">
+    <form asp-action="TakeSurvey" method="post" class="p-4 d-flex justify-content-center w-100">
+        <input hidden asp-for="Survey.Id" />
+        <input hidden asp-for="Request.SurveyId" />
+        @* <div asp-validation-summary="All"></div> *@
+        <div class="mt-4 mx-0 mx-sm-auto">
+            @{
+                int i = 0;
+            }
+            <div class="card my-4" style="max-width: 90vw; width: 640px;">
+                <div class="card-body">
+                    <h3 class="card-title text-center fw-bold text-primary">@Model.Survey.Name</h3>
+                </div>
+            </div>
+            @foreach (var question in Model.Survey.Questions.OrderBy(r => r.Position))
+            {
+                <div class="card my-4" style="max-width: 90vw;width: 640px;">
+                    <div class="card-body">
+                        <input hidden asp-for="Request.Answers[i].QuestionId" value="@question.Id" />
+                        <input hidden asp-for="Request.Answers[i].QuestionText" value="@question.Text" />
+                        @if (question.Type == QuestionTypes.single_choice.ToString())
+                        {
+                            <div class=" w-100">
+                                <div class=" bg-white px-2">
+                                    <p class="fw-bold">@question.Text</p>
+                                    @foreach (var choice in question.Choices.OrderBy(r => r.Position))
+                                    {
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" asp-for="Request.Answers[i].Value" id="@(question.Id+choice.Text)" type="radio" value="@choice.Text" />
+                                            <label for="@(question.Id+choice.Text)" class="form-check-label">
+                                                @choice.Text
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        }
+                        @if (question.Type == QuestionTypes.rating.ToString())
+                        {
+                            RatingIndexes.Add(i);
+                            <div id="section-get-selected-value-@(i)" class="mx-0 mx-sm-auto">
+
+                                <div class="">
+                                    <input asp-for="Request.Answers[i].Value" id="rating-value-@(i)" hidden />
+                                    <p class=""><strong>@question.Text</strong></p>
+
+                                    <ul class="h2 rating justify-content-start pb-3" data-mdb-toggle="rating" tabindex="0" data-mdb-value="@(question.Choices.Count / 2)" style="outline: none;">
+                                        @{
+                                            var choices = question.Choices.OrderBy(r => r.Position).ToList();
+                                        }
+                                        @for (int idx = 0; idx < question.Choices.Count; idx++)
+                                        {
+                                            var choice = choices[idx];
+                                            <li>
+                                                <i @* data-mdb-before="@(idx == 0 ? choice.Text : "")" data-mdb-after="@(idx == choices.Count-1 ? choice.Text : "")" *@ class="fa-star fa-sm text-primary fas active" data-mdb-toggle="tooltip" aria-label="@choice.Text" data-mdb-original-title="@choice.Text"></i>
+                                            </li>
+                                        }
+                                        @*                                                 @foreach (var choice in question.Choices.OrderBy(r => r.Position))
+                                {
+                                <li>
+                                <i class="fa-star fa-sm text-primary fas active" data-mdb-toggle="tooltip" aria-label="@choice.Text" data-mdb-original-title="@choice.Text"></i>
+                                </li>
+                                } *@
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        @if (question.Type == QuestionTypes.multi_open_ended.ToString())
+                        {
+                            <div class="px-2">
+                                <p class=""><strong>@question.Text</strong></p>
+                                <div class="form-outline mt-4">
+                                    <textarea asp-for="Request.Answers[i].Value" class="form-control" rows="4"></textarea>
+                                    <label class="form-label" asp-for="Request.Answers[i].Value" style="margin-left: 0px;">Your Answer</label>
+                                    <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 89.6px;"></div><div class="form-notch-trailing"></div></div>
+                                </div>
+                            </div>
+                        }
+                        @if (question.Type == QuestionTypes.single_open_ended.ToString())
+                        {
+                            <div class="px-2">
+                                <p class=""><strong>@question.Text</strong></p>
+                                <div class="form-outline mt-4">
+                                    <input asp-for="Request.Answers[i].Value" class="form-control" />
+                                    <label asp-for="Request.Answers[i].Value" class="form-label" style="margin-left: 0px;">Your Answer</label>
+                                    <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 89.6px;"></div><div class="form-notch-trailing"></div></div>
+                                </div>
+                            </div>
+                        }
+                        <span asp-validation-for="Request.Answers[i].Value" class="text-danger ms-2"></span>
+                    </div>
+                </div>
+                i++;
+            }
+            <div class="text-end me-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+</main>
+@section Scripts{
+    <partial name="_NotificationPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://kit.fontawesome.com/007e39c335.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/mdb5/standard/modules/2c5504ab9a86164db22a92dc8793843d.min.js"></script>
+    <script>
+        // This line is used to validate hidden inputs of ratings
+        $.validator.setDefaults({
+            ignore: [],
+        });
+    </script>
+
+    @foreach (var index in RatingIndexes)
+    {
+
+        <script>
+            document.querySelectorAll('#section-get-selected-value-@(index) i').forEach((icon) => {
+                icon.addEventListener('onSelect.mdb.rating', (e) => {
+                    document.getElementById("rating-value-@(index)").value = e.value;
+                    $("#rating-value-@(index)").valid();
+                });
+            });
+        </script>
+    }
+    }
+

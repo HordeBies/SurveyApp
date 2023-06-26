@@ -11,6 +11,8 @@ namespace SurveyApp.Domain.RepositoryContracts
         ISurveyRepository Surveys { get; }
         IQuestionRepository Questions { get; }
         IChoiceRepository Choices { get; }
+        ISubmissionRepository Submissions { get; }
+        IAnswerRepository Answers { get; }
         Task SaveAsync();
     }
 }

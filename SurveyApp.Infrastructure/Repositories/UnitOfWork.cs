@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace SurveyApp.Infrastructure.Repositories
 {
-    public class UnitOfWork(ApplicationDbContext db) : IUnitOfWork
+    public class UnitOfWork(ApplicationDbContext db, ISurveyRepository surveys, IQuestionRepository questions, IChoiceRepository choices, ISubmissionRepository submissions, IAnswerRepository answers) : IUnitOfWork
     {
-        public ISurveyRepository Surveys { get; } = new SurveyRepository(db);
-        public IQuestionRepository Questions { get; } = new QuestionRepository(db);
-        public IChoiceRepository Choices { get; } = new ChoiceRepository(db);
+        public ISurveyRepository Surveys { get; } = surveys;
+        public IQuestionRepository Questions { get; } = questions;
+        public IChoiceRepository Choices { get; } = choices;
+        public ISubmissionRepository Submissions { get; } = submissions;
+        public IAnswerRepository Answers { get; } = answers;
          
         public async Task SaveAsync()
         {

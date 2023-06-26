@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SurveyApp.Domain.Entities
 {
-    public class Survey
+    public class Submission
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<Question> Questions { get; set; }
-        public ICollection<Submission>? Submissions { get; set; }
+        public int SurveyId { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public IEnumerable<Answer> Answers { get; set; }
     }
 }

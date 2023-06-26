@@ -23,6 +23,11 @@ namespace SurveyApp.Core.Mappings
             CreateMap<ChoiceCreateRequest, Choice>();
             CreateMap<Choice, ChoiceResponse>();
 
+            CreateMap<SubmissionCreateRequest, Submission>();
+            CreateMap<Submission, SubmissionResponse>();
+
+            CreateMap<AnswerCreateRequest,Answer>();
+            CreateMap<Answer, AnswerResponse>();
         }
     }
 }

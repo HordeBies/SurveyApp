@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SurveyApp.Core.Enums
 {
-    public static class QuestionTypes
+    public enum QuestionTypes
     {
-        public const string SingleChoice = "single_choice";
-        public const string SingleOpenEnded = "single_open_ended";
-        public const string MultiOpenEnded = "multi_open_ended";
-        public const string Rating = "rating";
+        single_choice,
+        single_open_ended,
+        multi_open_ended,
+        rating
     }
 }

@@ -71,7 +71,7 @@ namespace SurveyApp.Web.Api.Controllers
                 return BadRequest(response);
             }
             var questions = await unitOfWork.Questions.GetAllAsync(q => q.SurveyId == survey_id);
-            foreach (var question in questions) // Replacing questions with new ones are more user friendly for client, user doesnt need to know any id for question or choice if they dont want to specifically edit them
+            foreach (var question in questions) // TODO: Preserve old questions for answers and analytics, need an isActive flag for partial survey.
             {
                 await unitOfWork.Questions.DeleteAsync(question);
             }
