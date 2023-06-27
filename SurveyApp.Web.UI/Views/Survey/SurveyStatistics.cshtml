@@ -63,7 +63,7 @@
                                     data.addRows([
                                 @foreach (var answer in answers)
                                 {
-                                    @:['Lorem ipsum dolor sit amet consectetur adipiscing elit inceptos habitant, molestie nam sapien vel urna morbi vivamus ut ullamcorper ante, feugiat mus eros laoreet consequat est risus ultrices. Varius eros magnis torquent volutpat massa bibendum pulvinar imperdiet, et mauris sociosqu turpis nulla justo blandit risus, viverra sed dictumst porta vestibulum tincidunt ultricies. Parturient platea fermentum pellentesque facilisi ad lacus eu ultrices aenean ullamcorper egestas, vestibulum a varius sociis consequat nullam litora non sollicitudin lacinia metus, dignissim auctor erat mauris felis integer cursus commodo tortor et                                    @Html.Raw(answer.Value)'],
+                                    @:['@Html.Raw(answer.Value)'],
 
                                 }
                                     ]);

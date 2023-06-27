@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SurveyApp.Domain.Entities;
 
 namespace SurveyApp.Infrastructure.DatabaseContexts
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
     {
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<Question> Questions { get; set; }

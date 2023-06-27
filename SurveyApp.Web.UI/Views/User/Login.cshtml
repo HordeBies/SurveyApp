@@ -1,0 +1,27 @@
+﻿@using SurveyApp.Core.DTO;
+@model LoginRequest
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form method="post" asp-action="Login" asp-route-ReturnUrl="@Context.Request.Query["ReturnUrl"]">
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Email</label>
+        <input type="email" class="form-control" asp-for="UserName">
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input type="password" class="form-control" asp-for="Password">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

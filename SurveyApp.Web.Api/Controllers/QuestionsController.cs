@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApp.Core.DTO;
 using SurveyApp.Domain.Entities;
@@ -9,9 +10,8 @@ using System.Net;
 namespace SurveyApp.Web.Api.Controllers
 {
     [Route("api/surveys/{survey_id:int}/questions")]
-    public class QuestionsController : ApiController
+    public class QuestionsController(IUnitOfWork unitOfWork, IMapper mapper) : ApiController
     {
-        public QuestionsController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<QuestionResponse>>>> GetQuestions(int survey_id)
@@ -34,6 +34,7 @@ namespace SurveyApp.Web.Api.Controllers
             response.StatusCode = HttpStatusCode.OK;
             return response;
         }
+
         [HttpGet("{question_id:int}")]
         public async Task<ActionResult<ApiResponse<QuestionResponse>>> GetQuestion(int survey_id,int question_id)
         {
@@ -55,7 +56,9 @@ namespace SurveyApp.Web.Api.Controllers
             response.StatusCode = HttpStatusCode.OK;
             return response;
         }
+
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateQuestion(int survey_id, QuestionCreateRequest request)
         {
             var response = new ApiResponse<QuestionResponse>();
@@ -82,7 +85,9 @@ namespace SurveyApp.Web.Api.Controllers
             response.Result = mapper.Map<QuestionResponse>(question);
             return CreatedAtAction(nameof(GetQuestion),new { survey_id = survey.Id, question_id = question.Id }, response);
         }
+
         [HttpPut("{question_id:int}")]
+        [Authorize]
         public async Task<ActionResult<ApiResponse<QuestionResponse>>> ReplaceQuestion(int survey_id, int question_id, QuestionReplaceRequest request)
         {
             var response = new ApiResponse<QuestionResponse>();
@@ -118,7 +123,9 @@ namespace SurveyApp.Web.Api.Controllers
             response.StatusCode = HttpStatusCode.OK;
             return response;
         }
+
         [HttpDelete("{question_id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteQuestion(int survey_id, int question_id)
         {
             var response = new ApiResponse();

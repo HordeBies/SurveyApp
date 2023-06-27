@@ -11,12 +11,5 @@ namespace SurveyApp.Web.Api.Controllers
     [TypeFilter(typeof(ApiExceptionFilter))]
     public class ApiController : ControllerBase
     {
-        protected readonly IUnitOfWork unitOfWork;
-        protected readonly IMapper mapper;
-        public ApiController(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-        }
     }
 }

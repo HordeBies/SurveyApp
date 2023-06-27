@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SurveyApp.Core.Mappings;
+using SurveyApp.Core.ServiceContracts;
+using SurveyApp.Core.Services;
 using SurveyApp.Domain.RepositoryContracts;
 using SurveyApp.Infrastructure.DatabaseContexts;
 using SurveyApp.Infrastructure.Repositories;
@@ -17,6 +19,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/user/login";
+    options.LogoutPath = "/user/logout";
+});
+
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -24,6 +32,7 @@ builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
 builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -44,6 +53,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

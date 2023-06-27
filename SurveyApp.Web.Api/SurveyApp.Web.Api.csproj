@@ -18,7 +18,9 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-preview.5.23302.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-preview.4.23260.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.4.23259.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.4.23259.3">

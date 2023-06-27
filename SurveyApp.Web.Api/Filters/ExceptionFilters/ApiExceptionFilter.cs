@@ -23,6 +23,10 @@ namespace SurveyApp.Web.Api.Filters.ExceptionFilters
             {
                 response.ErrorMessages.Add(context.Exception.ToString());
             }
+            else
+            {
+                response.ErrorMessages.Add("An Internal Error occurred");
+            }
             response.StatusCode = HttpStatusCode.InternalServerError;
             context.Result = new OkObjectResult(response);
         }

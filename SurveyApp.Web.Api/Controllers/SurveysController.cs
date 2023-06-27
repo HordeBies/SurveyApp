@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApp.Core.DTO;
 using SurveyApp.Domain.Entities;
@@ -10,9 +11,8 @@ using System.Net;
 namespace SurveyApp.Web.Api.Controllers
 {
     [Route("api/surveys")]
-    public class SurveysController : ApiController
+    public class SurveysController(IUnitOfWork unitOfWork, IMapper mapper) : ApiController
     {
-        public SurveysController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) {}
 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<SurveyResponse>>>> GetSurveys(bool populateQuestions = false)
@@ -47,6 +47,7 @@ namespace SurveyApp.Web.Api.Controllers
             return response;
         }
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ApiResponse<SurveyResponse>>> CreateSurvey(SurveyCreateRequest request)
         {
             var survey = mapper.Map<Survey>(request);
@@ -60,6 +61,7 @@ namespace SurveyApp.Web.Api.Controllers
             return CreatedAtAction(nameof(GetSurvey), new { survey_id = survey.Id }, response);
         }
         [HttpPut("{survey_id:int}")]
+        [Authorize]
         public async Task<ActionResult<ApiResponse<SurveyResponse>>> ReplaceSurvey(int survey_id, SurveyReplaceRequest request)
         {
             var response = new ApiResponse<SurveyResponse>();
@@ -82,6 +84,7 @@ namespace SurveyApp.Web.Api.Controllers
             return response;
         }
         [HttpDelete("{survey_id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteSurvey(int survey_id)
         {
             if(survey_id == 0)

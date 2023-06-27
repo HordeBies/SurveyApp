@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SurveyApp.Core.DTO;
 using SurveyApp.Domain.Entities;
@@ -44,6 +45,7 @@ namespace SurveyApp.Web.UI.Controllers
             return RedirectToAction(nameof(TakeSurvey), new { survey_id });
         }
         [HttpGet]
+        [Authorize]
         [Route("/statistics/{survey_id:int}")]
         public async Task<IActionResult> ShowSurveyStatistics(int survey_id)
         {
