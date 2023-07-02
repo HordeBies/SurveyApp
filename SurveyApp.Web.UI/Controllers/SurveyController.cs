@@ -46,6 +46,13 @@ namespace SurveyApp.Web.UI.Controllers
         }
         [HttpGet]
         [Authorize]
+        [Route("/statistics")]
+        public async Task<IActionResult> ShowSurveys()
+        {
+            return View("Index");
+        }
+        [HttpGet]
+        [Authorize]
         [Route("/statistics/{survey_id:int}")]
         public async Task<IActionResult> ShowSurveyStatistics(int survey_id)
         {
@@ -58,6 +65,13 @@ namespace SurveyApp.Web.UI.Controllers
             };
             model.StatsDict = model.Survey.Questions.ToDictionary(r => r, r => model.Submissions.SelectMany(t => t.Answers).Where(s => s.QuestionId == r.Id));
             return View("SurveyStatistics", model);
+        }
+        [HttpGet]
+        [Authorize]
+        [Route("/statistics/getall")]
+        public async Task<IActionResult> GetAll() // For Datatable ajax call
+        {
+            return Json(new { data = mapper.Map<IEnumerable<SurveyResponse>>(await unitOfWork.Surveys.GetAllAsync()) });
         }
     }
 }

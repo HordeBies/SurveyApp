@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Statistics";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <link rel="stylesheet" href="~/css/Survey/Index.css" />
+}
+
+<main role="main" class="pb-3">
+    <div class="p-4 d-flex justify-content-center w-100">
+        <div class="mt-4 mx-0 mx-sm-auto">
+            <div class="card my-4 p-3" style="max-width: 90vw; width: 1440px;">
+                <div class="card-body">
+
+                <table id="tblData" class="table table-bordered table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>Survey ID</th>
+                            <th>Survey Name</th>
+                            <th>Survey Participation URL</th>
+                            <th class="text-center">Survey Statistics</th>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts{
+    <script src="~/js/Survey/Index.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+}

@@ -9,7 +9,12 @@
         <div class="mt-4 mx-0 mx-sm-auto">
             <div class="card my-4" style="max-width: 90vw; width: 960px;">
                 <div class="card-body">
+                    <a href="/statistics" class="mb-3 fw-semibold text-uppercase">
+                        <i class="bi bi-arrow-left"></i>
+                        <small> Return to dashboard</small>
+                    </a>
                     <h3 class="card-title text-center fw-bold text-primary">@Model.Survey.Name</h3>
+                    <h6 class="">Total Submissions: <strong class="fw-bold">@(Model.Submissions.Count())</strong></h6>
                 </div>
             </div>
             @foreach (var kvp in Model.StatsDict)
@@ -89,5 +94,6 @@
 </main>
 
 @section Styles{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 }
